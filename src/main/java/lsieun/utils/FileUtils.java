@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class FileUtils {
     public static final File OUTPUT_DIR = getOutputDirectory();
@@ -17,22 +16,22 @@ public class FileUtils {
     }
 
     public static File getOutputDirectory() {
-        String filepath = System.getProperty("user.dir") + File.separator + "target" + File.separator + "classes";
+        String filepath = getBaseDirectory();
         return new File(filepath);
     }
 
     public static String getFilePath(String relativePath) {
-        String dir = Objects.requireNonNull(FileUtils.class.getResource("/")).getPath();
+        String dir = getBaseDirectory();
         String filepath = dir + relativePath;
-        if (filepath.contains(":")) {
+        if (filepath.startsWith("/") && filepath.contains(":")) {
             return filepath.substring(1);
         }
         return filepath;
     }
 
-    public static String getFilePath(Class<?> clazz, String className) {
-        String path = Objects.requireNonNull(clazz.getResource("/")).getPath();
-        return String.format("%s%s.class", path, className.replace('.', File.separatorChar));
+    private static String getBaseDirectory() {
+        String filepath = System.getProperty("user.dir") + File.separator + "target" + File.separator + "classes" + File.separator;
+        return filepath.replace("\\", "/");
     }
 
     public static byte[] readBytes(String filepath) {
@@ -182,7 +181,7 @@ public class FileUtils {
             throw new IllegalArgumentException("inputStream is null!!!");
         }
 
-        try {
+        try (in) {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buf = new byte[BUFFER_SIZE];
             int len;
@@ -194,14 +193,7 @@ public class FileUtils {
         catch (IOException ex) {
             ex.printStackTrace();
         }
-        finally {
-            try {
-                in.close();
-            }
-            catch (IOException e) {
-                //
-            }
-        }
+        //
         return null;
     }
 

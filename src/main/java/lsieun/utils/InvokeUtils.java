@@ -26,17 +26,22 @@ public class InvokeUtils {
             if (Modifier.isAbstract(modifiers)) {
                 continue;
             }
+            if (!Modifier.isPublic(modifiers)) {
+                continue;
+            }
 
             Class<?>[] parameterTypes = method.getParameterTypes();
             Object[] args = createRandomMethodArgs(parameterTypes);
             if (Modifier.isStatic(modifiers)) {
                 printMethodAndArgs(method, args);
+                method.setAccessible(true);
                 method.invoke(args);
             }
             else {
                 if (isAbstractClass) continue;
                 Object instance = createInstance(clazz);
                 printMethodAndArgs(method, args);
+                method.setAccessible(true);
                 method.invoke(instance, args);
             }
         }
