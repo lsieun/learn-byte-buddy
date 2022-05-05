@@ -37,7 +37,7 @@ public class OutputUtils {
         if (!flag) return;
 
         Map<TypeDescription, LoadedTypeInitializer> loadedTypeInitializers = dynamicType.getLoadedTypeInitializers();
-        System.out.println("Loaded Type Initializers Size: " + loadedTypeInitializers.size());
+        System.out.println("Loaded Type Initializers: " + loadedTypeInitializers.size());
         for (Map.Entry<TypeDescription, LoadedTypeInitializer> entry : loadedTypeInitializers.entrySet()) {
             TypeDescription type = entry.getKey();
             LoadedTypeInitializer typeInitializer = entry.getValue();

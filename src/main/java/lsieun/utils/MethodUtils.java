@@ -5,6 +5,19 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class MethodUtils {
+    public static Method findMethod(Class<?> clazz, String methodName) {
+        Method[] methodArray = clazz.getDeclaredMethods();
+
+        Method targetMethod = null;
+        for (Method m : methodArray) {
+            if (m.getName().equals(methodName)) {
+                targetMethod = m;
+                break;
+            }
+        }
+        return targetMethod;
+    }
+
     public static void invoke(String className, String methodName, Object... args) throws Exception {
         invoke(Class.forName(className), methodName, args);
     }
