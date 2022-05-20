@@ -4,7 +4,7 @@ import lsieun.utils.OutputUtils;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 
-public class HelloWorldGenerate {
+public class HelloWorldRedefine {
     public static void main(String[] args) throws Exception {
         // 第一步，准备参数
         String className = "sample.HelloWorld";
@@ -12,7 +12,7 @@ public class HelloWorldGenerate {
 
         // 第二步，生成类
         ByteBuddy byteBuddy = new ByteBuddy();
-        DynamicType.Builder<?> builder = byteBuddy.subclass(Object.class)
+        DynamicType.Builder<?> builder = byteBuddy.redefine(Object.class)
                 .name(className);
 
 

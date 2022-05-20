@@ -1,5 +1,6 @@
 package lsieun.buddy.description;
 
+import lsieun.annotation.ToDo;
 import lsieun.cst.FormatConst;
 import net.bytebuddy.description.TypeVariableSource;
 import net.bytebuddy.description.annotation.AnnotationValue;
@@ -13,20 +14,25 @@ import net.bytebuddy.description.type.TypeList;
 import java.lang.reflect.Modifier;
 import java.util.Formatter;
 
+@ToDo(items = {
+        "print method annotation"
+})
 public class DescriptionForMethod {
     public static void print(MethodDescription desc) {
         DescriptionForCommon.printImplementationClass(desc);
 
-        // type
+        // type or class
         printDeclaringType(desc);
 
         // method
         printMethodHead(desc);
         printMethodBody(desc);
 
-        //
+        // category and modifiers
         printMethodCategory(desc);
         printMethodModifier(desc);
+
+        // bootstrap
         printMethodBootstrap(desc);
 
         // annotation
