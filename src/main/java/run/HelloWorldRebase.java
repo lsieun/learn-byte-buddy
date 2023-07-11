@@ -27,6 +27,6 @@ public class HelloWorldRebase {
 
         // 第三步，输出结果
         DynamicType.Unloaded<?> unloadedType = builder.make();
-        OutputUtils.save(unloadedType);
+        OutputUtils.save(unloadedType, true);
     }
 }

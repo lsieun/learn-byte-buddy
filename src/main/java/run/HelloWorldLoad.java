@@ -1,14 +1,12 @@
 package run;
 
+import lsieun.utils.InvokeUtils;
 import lsieun.utils.OutputUtils;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 
 public class HelloWorldLoad {
     public static void main(String[] args) throws Exception {
@@ -33,14 +31,10 @@ public class HelloWorldLoad {
         // 第四步，进行加载
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         DynamicType.Loaded<?> loadedType = unloadedType.load(classLoader, ClassLoadingStrategy.Default.CHILD_FIRST);
-        Class<?> clazz = loadedType.getLoaded();
+        Class<?> loadedClazz = loadedType.getLoaded();
 
 
         // 第五步，创建对象
-        Constructor<?> constructor = clazz.getDeclaredConstructor();
-        Object instance = constructor.newInstance();
-        Method method = clazz.getDeclaredMethod("test");
-        Object obj = method.invoke(instance);
-        System.out.println(obj);
+        InvokeUtils.invokeAllMethods(loadedClazz);
     }
 }

@@ -1,13 +1,8 @@
 package lsieun.utils;
 
-import lsieun.buddy.asm.modifier.RemoveSyntheticVisitor;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.LoadedTypeInitializer;
-import net.bytebuddy.jar.asm.ClassReader;
-import net.bytebuddy.jar.asm.ClassVisitor;
-import net.bytebuddy.jar.asm.ClassWriter;
-import net.bytebuddy.jar.asm.Opcodes;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,17 +12,26 @@ import java.util.Map;
 public class OutputUtils {
 
     public static void save(DynamicType dynamicType) throws IOException {
-        saveMainType(dynamicType);
-
-        saveTypeInitializers(dynamicType);
+        save(dynamicType, false);
     }
 
-    private static void saveMainType(DynamicType dynamicType) throws IOException {
+    public static void save(DynamicType dynamicType, boolean removeSynthetic) throws IOException {
+        saveMainType(dynamicType, removeSynthetic);
+
+        saveTypeInitializers(dynamicType);
+
+        dynamicType.close();
+    }
+
+    private static void saveMainType(DynamicType dynamicType, boolean removeSynthetic) throws IOException {
         Map<TypeDescription, File> map = dynamicType.saveIn(FileUtils.OUTPUT_DIR);
         System.out.println("Main Type: " + map.size());
         for (Map.Entry<TypeDescription, File> entry : map.entrySet()) {
             String type = entry.getKey().getName();
             String path = entry.getValue().getPath().replace("\\", "/");
+            if (removeSynthetic) {
+                ASMUtils.removeSynthetic(path);
+            }
             printFilePath(type, path);
         }
     }
@@ -54,7 +58,6 @@ public class OutputUtils {
             }
         }
     }
-
 
 
     static void printFilePath(String name, String filepath) {

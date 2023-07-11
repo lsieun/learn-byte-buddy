@@ -24,9 +24,9 @@ public class ASMUtils {
         ClassVisitor cv = new RemoveSyntheticVisitor(Opcodes.ASM9, cw);
         cr.accept(cv, 0);
 
-        String className = cr.getClassName();
+        // String className = cr.getClassName();
         byte[] newBytes = cw.toByteArray();
         FileUtils.writeBytes(filepath, newBytes);
-        OutputUtils.printFilePath(className, filepath);
+        // OutputUtils.printFilePath(className, filepath);
     }
 }

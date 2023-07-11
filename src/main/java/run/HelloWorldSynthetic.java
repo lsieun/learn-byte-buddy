@@ -6,7 +6,7 @@ import lsieun.utils.FileUtils;
 public class HelloWorldSynthetic {
     public static void main(String[] args) {
         String[] array = {
-                FileUtils.getFilePath("sample/HelloWorld05.class"),
+                FileUtils.getFilePath("sample/HelloWorld.class"),
         };
 
         System.out.println("Remove Synthetic:");
