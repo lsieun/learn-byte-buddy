@@ -35,14 +35,16 @@ public class InvokeUtils {
             if (Modifier.isStatic(modifiers)) {
                 printMethodAndArgs(method, args);
                 method.setAccessible(true);
-                method.invoke(args);
+                Object result = method.invoke(args);
+                System.out.println("[Result] " + result);
             }
             else {
                 if (isAbstractClass) continue;
                 Object instance = createInstance(clazz);
                 printMethodAndArgs(method, args);
                 method.setAccessible(true);
-                method.invoke(instance, args);
+                Object result = method.invoke(instance, args);
+                System.out.println("[Result] " + result);
             }
         }
     }
@@ -70,7 +72,7 @@ public class InvokeUtils {
         }
         String parameterString = String.join(", ", parameterList);
 
-        return String.format("%nNow, let's invoke: %s %s %s(%s)", modifierStr, returnString, methodName, parameterString);
+        return String.format("%n[Method] %s %s %s(%s)", modifierStr, returnString, methodName, parameterString);
     }
 
     private static Object createInstance(Class<?> clazz) throws Exception {

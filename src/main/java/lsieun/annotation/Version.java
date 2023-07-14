@@ -5,7 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Version {
-    int major();
+    int major() default 1;
 
-    int minor();
+    int minor() default 0;
 }
