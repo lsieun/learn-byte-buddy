@@ -2,8 +2,9 @@ package lsieun.buddy.implementation.bytecode;
 
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.bytecode.StackManipulation;
-import net.bytebuddy.jar.asm.MethodVisitor;
-import net.bytebuddy.jar.asm.Opcodes;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+
 
 public enum IntegerSum implements StackManipulation {
     INSTANCE; // singleton

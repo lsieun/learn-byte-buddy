@@ -1,10 +1,10 @@
 package lsieun.buddy.asm.modifier;
 
 
-import net.bytebuddy.jar.asm.ClassVisitor;
-import net.bytebuddy.jar.asm.FieldVisitor;
-import net.bytebuddy.jar.asm.MethodVisitor;
-import net.bytebuddy.jar.asm.Opcodes;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 public class RemoveSyntheticVisitor extends ClassVisitor {
     public RemoveSyntheticVisitor(int api, ClassVisitor classVisitor) {

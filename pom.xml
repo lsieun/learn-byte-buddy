@@ -13,13 +13,13 @@
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <byte.buddy.version>1.14.5</byte.buddy.version>
+        <byte.buddy.version>1.14.18</byte.buddy.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
+            <artifactId>byte-buddy-dep</artifactId>
             <version>${byte.buddy.version}</version>
         </dependency>
     </dependencies>
