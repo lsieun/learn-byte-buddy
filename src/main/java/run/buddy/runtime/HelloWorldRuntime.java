@@ -1,4 +1,4 @@
-package run.instrumentation.runtime;
+package run.buddy.runtime;
 
 import lsieun.utils.InvokeUtils;
 import lsieun.utils.OutputUtils;

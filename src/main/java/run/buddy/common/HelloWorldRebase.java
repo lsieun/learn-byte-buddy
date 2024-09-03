@@ -1,4 +1,4 @@
-package run.instrumentation.common;
+package run.buddy.common;
 
 import lsieun.buddy.delegation.HardWorker;
 import lsieun.utils.OutputUtils;

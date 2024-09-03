@@ -1,4 +1,4 @@
-package run.instrumentation.basic;
+package run.buddy.basic;
 
 
 import lsieun.buddy.description.DescriptionForMethod;
