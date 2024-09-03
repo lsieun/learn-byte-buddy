@@ -1,10 +1,10 @@
-package run.basic;
+package run.instrumentation.common;
 
 import lsieun.utils.OutputUtils;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 
-public class HelloWorldByteBuddy {
+public class HelloWorldRedefine {
     public static void main(String[] args) throws Exception {
         // 第一步，准备参数
         String className = "sample.HelloWorld";
@@ -12,7 +12,7 @@ public class HelloWorldByteBuddy {
 
         // 第二步，生成类
         ByteBuddy byteBuddy = new ByteBuddy();
-        DynamicType.Builder<?> builder = byteBuddy.makeInterface()
+        DynamicType.Builder<?> builder = byteBuddy.redefine(Object.class)
                 .name(className);
 
 

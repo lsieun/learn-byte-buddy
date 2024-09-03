@@ -1,4 +1,4 @@
-package run.runtime;
+package run.instrumentation.runtime;
 
 import lsieun.utils.InvokeUtils;
 import lsieun.utils.OutputUtils;
@@ -8,7 +8,7 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
 
-public class HelloWorldLoad {
+public class HelloWorldRuntime {
     public static void main(String[] args) throws Exception {
         // 第一步，准备参数
         String className = "sample.HelloWorld";

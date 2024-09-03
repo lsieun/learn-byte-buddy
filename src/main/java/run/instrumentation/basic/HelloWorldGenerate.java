@@ -1,4 +1,4 @@
-package run;
+package run.instrumentation.basic;
 
 import lsieun.utils.OutputUtils;
 import net.bytebuddy.ByteBuddy;
