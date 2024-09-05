@@ -16,24 +16,44 @@ public class OutputUtils {
     }
 
     public static void save(DynamicType dynamicType, boolean removeSynthetic) throws IOException {
-        saveMainType(dynamicType, removeSynthetic);
+        saveMainAndAuxiliaryType(dynamicType, removeSynthetic);
 
         saveTypeInitializers(dynamicType);
 
         dynamicType.close();
     }
 
-    private static void saveMainType(DynamicType dynamicType, boolean removeSynthetic) throws IOException {
+    private static void saveMainAndAuxiliaryType(DynamicType dynamicType, boolean removeSynthetic) throws IOException {
         Map<TypeDescription, File> map = dynamicType.saveIn(FileUtils.OUTPUT_DIR);
-        System.out.println("Main Type: " + map.size());
-        for (Map.Entry<TypeDescription, File> entry : map.entrySet()) {
-            String type = entry.getKey().getName();
-            String path = entry.getValue().getPath().replace("\\", "/");
-            if (removeSynthetic) {
-                ASMUtils.removeSynthetic(path);
-            }
-            printFilePath(type, path);
+
+        // Main Type
+        System.out.println("Main Type: ");
+        TypeDescription mainTypeDescription = dynamicType.getTypeDescription();
+        printTypeAndPath(mainTypeDescription, map.get(mainTypeDescription), removeSynthetic);
+
+        // Auxiliary Types
+        Map<TypeDescription, byte[]> auxiliaryTypesMap = dynamicType.getAuxiliaryTypes();
+        if (auxiliaryTypesMap.isEmpty()) {
+            return;
         }
+        System.out.println("Auxiliary Types: " + auxiliaryTypesMap.size());
+        for (Map.Entry<TypeDescription, File> entry : map.entrySet()) {
+            TypeDescription typeDescription = entry.getKey();
+            File file = entry.getValue();
+            if (auxiliaryTypesMap.containsKey(typeDescription)) {
+                printTypeAndPath(typeDescription, file, removeSynthetic);
+            }
+        }
+    }
+
+
+    private static void printTypeAndPath(TypeDescription typeDescription, File file, boolean removeSynthetic) throws IOException {
+        String type = typeDescription.getName();
+        String path = file.getPath().replace("\\", "/");
+        if (removeSynthetic) {
+            ASMUtils.removeSynthetic(path);
+        }
+        printFilePath(type, path);
     }
 
     private static void saveTypeInitializers(DynamicType dynamicType) throws IOException {
@@ -51,8 +71,7 @@ public class OutputUtils {
             if (typeInitializer instanceof Serializable) {
                 SerializationUtils.write(typeInitializer, filepath);
                 printFilePath(name, filepath);
-            }
-            else {
+            } else {
                 String message = String.format("%s:%s is not serializable", name, typeInitializer.getClass().getName());
                 System.out.println(message);
             }

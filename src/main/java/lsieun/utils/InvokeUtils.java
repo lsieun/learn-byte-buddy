@@ -1,6 +1,6 @@
 package lsieun.utils;
 
-import net.bytebuddy.utility.RandomString;
+import lsieun.cst.MyConst;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -32,20 +32,28 @@ public class InvokeUtils {
 
             Class<?>[] parameterTypes = method.getParameterTypes();
             Object[] args = createRandomMethodArgs(parameterTypes);
+            Object result;
             if (Modifier.isStatic(modifiers)) {
                 printMethodAndArgs(method, args);
                 method.setAccessible(true);
-                Object result = method.invoke(args);
-                System.out.println("[Result] " + result);
+                result = method.invoke(args);
             }
             else {
                 if (isAbstractClass) continue;
                 Object instance = createInstance(clazz);
                 printMethodAndArgs(method, args);
                 method.setAccessible(true);
-                Object result = method.invoke(instance, args);
+                result = method.invoke(instance, args);
+            }
+
+            Class<?> returnType = method.getReturnType();
+            if (returnType == void.class) {
+                System.out.println("[Result] NO RESULT");
+            }
+            else {
                 System.out.println("[Result] " + result);
             }
+            System.out.println(MyConst.SEPARATION_LINE);
         }
     }
 
@@ -115,25 +123,25 @@ public class InvokeUtils {
                     val = Boolean.TRUE;
                 }
                 else if (type == byte.class) {
-                    val = (byte) (Math.random() * 10);
+                    val = (byte) (1 + Math.random() * 10);
                 }
                 else if (type == short.class) {
-                    val = (short) (Math.random() * 10);
+                    val = (short) (11 + Math.random() * 10);
                 }
                 else if (type == char.class) {
-                    val = (char) (Math.random() * 10);
+                    val = (char) ('A' + Math.random() * 26);
                 }
                 else if (type == int.class) {
-                    val = (int) (Math.random() * 10);
+                    val = (int) (21 + Math.random() * 10);
                 }
                 else if (type == float.class) {
-                    val = (float) (Math.random() * 10);
+                    val = (float) (31 + Math.random() * 10);
                 }
                 else if (type == long.class) {
-                    val = (long) (Math.random() * 10);
+                    val = (long) (41 + Math.random() * 10);
                 }
                 else if (type == double.class) {
-                    val = Math.random() * 10;
+                    val = 51 + Math.random() * 10;
                 }
                 else {
                     val = null;
@@ -141,7 +149,9 @@ public class InvokeUtils {
                 args[i] = val;
             }
             else if (type == String.class) {
-                args[i] = new RandomString(8).nextString();
+                int num = MyConst.NAMES.length;
+                int index = (int)(num * Math.random());
+                args[i] = MyConst.NAMES[index];
             }
             else if (type == Date.class) {
                 args[i] = new Date();
