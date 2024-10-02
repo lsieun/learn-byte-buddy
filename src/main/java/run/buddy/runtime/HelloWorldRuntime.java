@@ -1,6 +1,6 @@
 package run.buddy.runtime;
 
-import lsieun.utils.InvokeUtils;
+import lsieun.utils.MethodInvokeUtils;
 import lsieun.utils.OutputUtils;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
@@ -35,6 +35,6 @@ public class HelloWorldRuntime {
 
 
         // 第五步，创建对象
-        InvokeUtils.invokeAllMethods(loadedClazz);
+        MethodInvokeUtils.invokeAllMethods(loadedClazz, false);
     }
 }

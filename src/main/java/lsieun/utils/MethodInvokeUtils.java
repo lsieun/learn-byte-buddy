@@ -5,18 +5,96 @@ import lsieun.cst.MyConst;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
-public class InvokeUtils {
-    public static void invokeAllMethods(String className) throws Exception {
-        Class<?> clazz = Class.forName(className);
-        invokeAllMethods(clazz);
+public class MethodInvokeUtils {
+    public static Object invokeOneMethodWithArgs(String className, String methodName, Object... args) throws Exception {
+        return invokeOneMethodWithArgs(Class.forName(className), methodName, args);
     }
 
-    public static void invokeAllMethods(Class<?> clazz) throws Exception {
+    public static Object invokeOneMethodWithArgs(Class<?> clazz, String methodName, Object... args) throws Exception {
+        Method[] methodArray = clazz.getDeclaredMethods();
+        Method candidate = null;
+        for (Method method : methodArray) {
+            if (method.getName().endsWith(methodName)) {
+                candidate = method;
+                break;
+            }
+        }
+
+        if (candidate == null) {
+            String message = String.format("can not find target method: %s from %s", methodName, clazz.getName());
+            System.out.println(message);
+            return null;
+        }
+
+        int modifiers = candidate.getModifiers();
+        Class<?> returnType = candidate.getReturnType();
+
+        Object result;
+        if (Modifier.isStatic(modifiers)) {
+            result = candidate.invoke(args);
+        }
+        else {
+            Constructor<?> constructor = clazz.getDeclaredConstructor();
+            Object instance = constructor.newInstance();
+            result = candidate.invoke(instance, args);
+        }
+
+        if (returnType != void.class) {
+            System.out.println(result);
+        }
+        return result;
+    }
+
+
+    public static void invoke(Class<?> clazz, List<String> methodNameList, Object[] objArray) throws Exception {
+        invoke(clazz, methodNameList, Arrays.asList(objArray));
+    }
+
+    public static void invoke(Class<?> clazz, List<String> methodNameList, List<Object> list) throws Exception {
+        for (Object obj : list) {
+
+            int size = methodNameList.size();
+            String[][] matrix = new String[size + 1][2];
+            matrix[0][0] = "clazz";
+            matrix[0][1] = ValueUtils.formatValue(obj);
+
+            for (int i = 0; i < size; i++) {
+                String methodName = methodNameList.get(i);
+                Method m = MemberFindUtils.findOneMethodWithoutArgs(clazz, methodName);
+                Object result = m.invoke(obj);
+                String text = ValueUtils.formatValue(result);
+
+                matrix[i + 1][0] = String.format("%s()", methodName);
+                matrix[i + 1][1] = text;
+            }
+
+            TableUtils.printTable(matrix);
+        }
+    }
+
+    public static void invokeAllMethods(String className, boolean verbose) throws Exception {
+        Class<?> clazz = Class.forName(className);
+        invokeAllMethods(clazz, verbose);
+    }
+
+    public static void invokeAllMethods(Class<?> clazz, boolean verbose) throws Exception {
+        Object instance = createInstance(clazz);
+        invokeAllMethods(clazz, instance, verbose);
+    }
+
+    public static void invokeAllMethods(Object instance, boolean verbose) throws Exception {
+        Objects.requireNonNull(instance);
+        Class<?> clazz = instance.getClass();
+        if (clazz.isPrimitive()) {
+            return;
+        }
+        invokeAllMethods(clazz, instance, verbose);
+    }
+
+    public static void invokeAllMethods(Class<?> clazz, Object instance, boolean verbose) throws Exception {
         int classModifiers = clazz.getModifiers();
         boolean isAbstractClass = Modifier.isAbstract(classModifiers);
 
@@ -34,14 +112,18 @@ public class InvokeUtils {
             Object[] args = createRandomMethodArgs(parameterTypes);
             Object result;
             if (Modifier.isStatic(modifiers)) {
-                printMethodAndArgs(method, args);
+                if (verbose) {
+                    printMethodAndArgs(method, args);
+                }
+
                 method.setAccessible(true);
                 result = method.invoke(args);
             }
             else {
                 if (isAbstractClass) continue;
-                Object instance = createInstance(clazz);
-                printMethodAndArgs(method, args);
+                if (verbose) {
+                    printMethodAndArgs(method, args);
+                }
                 method.setAccessible(true);
                 result = method.invoke(instance, args);
             }
@@ -150,11 +232,14 @@ public class InvokeUtils {
             }
             else if (type == String.class) {
                 int num = MyConst.NAMES.length;
-                int index = (int)(num * Math.random());
+                int index = (int) (num * Math.random());
                 args[i] = MyConst.NAMES[index];
             }
             else if (type == Date.class) {
                 args[i] = new Date();
+            }
+            else if (type == LocalDate.class) {
+                args[i] = LocalDate.now();
             }
             else {
                 args[i] = null;

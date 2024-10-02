@@ -5,6 +5,10 @@ import java.lang.reflect.Constructor;
 public class ClassUtils {
     public static Object createInstance(String className, Object... args) throws Exception {
         Class<?> clazz = Class.forName(className);
+        return createInstance(clazz);
+    }
+
+    public static Object createInstance(Class<?> clazz, Object... args) throws Exception {
         int length = args.length;
 
         Constructor<?> candidate = null;
@@ -19,13 +23,13 @@ public class ClassUtils {
 
         if (candidate != null) {
             Class<?>[] parameterTypes = candidate.getParameterTypes();
-            return createInstance(clazz, parameterTypes, args);
+            return createInstanceByConstructor(clazz, parameterTypes, args);
         }
 
         return null;
     }
 
-    public static Object createInstance(Class<?> clazz, Class<?>[] parameterTypes, Object... args) throws Exception {
+    public static Object createInstanceByConstructor(Class<?> clazz, Class<?>[] parameterTypes, Object... args) throws Exception {
         Constructor<?> constructor = clazz.getDeclaredConstructor(parameterTypes);
         return constructor.newInstance(args);
     }

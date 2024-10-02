@@ -7,6 +7,7 @@ import net.bytebuddy.implementation.LoadedTypeInitializer;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.util.Map;
 
 public class OutputUtils {
@@ -24,12 +25,12 @@ public class OutputUtils {
     }
 
     private static void saveMainAndAuxiliaryType(DynamicType dynamicType, boolean removeSynthetic) throws IOException {
-        Map<TypeDescription, File> map = dynamicType.saveIn(FileUtils.OUTPUT_DIR);
+        Map<TypeDescription, File> map = dynamicType.saveIn(FileUtils.OUTPUT_DIR.toFile());
 
         // Main Type
         System.out.println("Main Type: ");
         TypeDescription mainTypeDescription = dynamicType.getTypeDescription();
-        printTypeAndPath(mainTypeDescription, map.get(mainTypeDescription), removeSynthetic);
+        printTypeAndPath(mainTypeDescription, map.get(mainTypeDescription).toPath(), removeSynthetic);
 
         // Auxiliary Types
         Map<TypeDescription, byte[]> auxiliaryTypesMap = dynamicType.getAuxiliaryTypes();
@@ -41,19 +42,18 @@ public class OutputUtils {
             TypeDescription typeDescription = entry.getKey();
             File file = entry.getValue();
             if (auxiliaryTypesMap.containsKey(typeDescription)) {
-                printTypeAndPath(typeDescription, file, removeSynthetic);
+                printTypeAndPath(typeDescription, file.toPath(), removeSynthetic);
             }
         }
     }
 
 
-    private static void printTypeAndPath(TypeDescription typeDescription, File file, boolean removeSynthetic) throws IOException {
+    private static void printTypeAndPath(TypeDescription typeDescription, Path filepath, boolean removeSynthetic) throws IOException {
         String type = typeDescription.getName();
-        String path = file.getPath().replace("\\", "/");
         if (removeSynthetic) {
-            ASMUtils.removeSynthetic(path);
+            ASMUtils.removeSynthetic(filepath);
         }
-        printFilePath(type, path);
+        printFilePath(type, filepath);
     }
 
     private static void saveTypeInitializers(DynamicType dynamicType) throws IOException {
@@ -67,11 +67,12 @@ public class OutputUtils {
             LoadedTypeInitializer typeInitializer = entry.getValue();
 
             String name = type.getName();
-            String filepath = String.format("%s/%s.ser", FileUtils.OUTPUT_DIR, name).replace("\\", "/");
+            Path filepath = Path.of(FileUtils.OUTPUT_DIR.toString(), name);
             if (typeInitializer instanceof Serializable) {
                 SerializationUtils.write(typeInitializer, filepath);
                 printFilePath(name, filepath);
-            } else {
+            }
+            else {
                 String message = String.format("%s:%s is not serializable", name, typeInitializer.getClass().getName());
                 System.out.println(message);
             }
@@ -79,9 +80,8 @@ public class OutputUtils {
     }
 
 
-    static void printFilePath(String name, String filepath) {
-        String forwardSlashPath = filepath.replace("\\", "/");
-        String message = String.format("    %s: file:///%s", name, forwardSlashPath);
+    static void printFilePath(String name, Path filepath) {
+        String message = String.format("    %s: %s", name, filepath.toUri());
         System.out.println(message);
     }
 }

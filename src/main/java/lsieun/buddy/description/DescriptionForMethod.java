@@ -2,9 +2,12 @@ package lsieun.buddy.description;
 
 import lsieun.annotation.ToDo;
 import lsieun.cst.FormatConst;
+import lsieun.utils.TableUtils;
+import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.TypeVariableSource;
 import net.bytebuddy.description.annotation.AnnotationValue;
 import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.method.ParameterDescription;
 import net.bytebuddy.description.method.ParameterList;
 import net.bytebuddy.description.modifier.*;
 import net.bytebuddy.description.type.TypeDefinition;
@@ -12,7 +15,10 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.description.type.TypeList;
 
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Formatter;
+import java.util.List;
 
 @ToDo(items = {
         "print method annotation"
@@ -260,5 +266,119 @@ public class DescriptionForMethod {
         fm.format(FormatConst.STANDARD_FORMAT_NEW_LINE, "asDefined()", definedShape);
 
         System.out.println(sb);
+    }
+
+    public static void compare(MethodDescription... methodDescArray) {
+        List<MethodDescription> methodList = Arrays.asList(methodDescArray);
+        compare(methodList);
+    }
+
+    public static void compare(List<? extends MethodDescription> methodList) {
+        int length = methodList.size();
+        String[][] firstMatrix = new String[13][length + 1];
+        firstMatrix[0][0] = "Method Info";
+        firstMatrix[1][0] = "getDeclaringType()";
+        firstMatrix[2][0] = "getActualModifiers()";
+        firstMatrix[3][0] = "isTypeInitializer()";
+        firstMatrix[4][0] = "isConstructor()";
+        firstMatrix[5][0] = "isMethod()";
+        firstMatrix[6][0] = "getParameters()";
+        firstMatrix[7][0] = "getReturnType()";
+        firstMatrix[8][0] = "getExceptionTypes()";
+        firstMatrix[9][0] = "asSignatureToken()";
+        firstMatrix[10][0] = "asTypeToken()";
+        firstMatrix[11][0] = "isBridgeCompatible()";
+        firstMatrix[12][0] = "getStackSize()";
+
+        for (int i = 0; i < length; i++) {
+            MethodDescription methodDesc = methodList.get(i);
+
+            int colIndex = i + 1;
+            firstMatrix[0][colIndex] = methodDesc.getInternalName();
+            firstMatrix[1][colIndex] = methodDesc.getDeclaringType().getTypeName();
+            firstMatrix[2][colIndex] = Modifier.toString(methodDesc.getActualModifiers());
+            firstMatrix[3][colIndex] = String.valueOf(methodDesc.isTypeInitializer());
+            firstMatrix[4][colIndex] = String.valueOf(methodDesc.isConstructor());
+            firstMatrix[5][colIndex] = String.valueOf(methodDesc.isMethod());
+            firstMatrix[6][colIndex] = formatParamList(methodDesc.getParameters());
+            firstMatrix[7][colIndex] = methodDesc.getReturnType().toString();
+            firstMatrix[8][colIndex] = format(methodDesc.getExceptionTypes());
+            firstMatrix[9][colIndex] =  methodDesc.asSignatureToken().toString();
+            firstMatrix[10][colIndex] =methodDesc.asTypeToken().toString();
+            firstMatrix[11][colIndex] =String.valueOf(methodDesc.isBridgeCompatible(
+                    new MethodDescription.TypeToken(
+                            TypeDescription.ForLoadedType.of(void.class),
+                            Collections.emptyList()
+                    )
+            ));
+            firstMatrix[12][colIndex] =String.valueOf(methodDesc.getStackSize());
+        }
+
+        TableUtils.printTable(firstMatrix);
+
+        String[][] secondMatrix = new String[4][length + 1];
+        secondMatrix[0][0] = "Method Invoke";
+        secondMatrix[1][0] = "getReceiverType()";
+        secondMatrix[2][0] = "isInvokableOn()";
+        secondMatrix[3][0] = "isSpecializableFor()";
+
+        for (int i = 0; i < length; i++) {
+            MethodDescription methodDesc = methodList.get(i);
+
+            int colIndex = i + 1;
+            secondMatrix[0][colIndex] = methodDesc.getInternalName();
+            secondMatrix[1][colIndex] = String.valueOf(methodDesc.getReceiverType());
+            secondMatrix[2][colIndex] = String.valueOf(methodDesc.isInvokableOn(methodDesc.getDeclaringType().asErasure()));
+            secondMatrix[3][colIndex] = String.valueOf(methodDesc.isSpecializableFor(methodDesc.getDeclaringType().asErasure()));
+        }
+
+        TableUtils.printTable(secondMatrix);
+
+        String[][] thirdMatrix = new String[7][length + 1];
+        thirdMatrix[0][0] = "";
+        thirdMatrix[1][0] = "isVirtual()";
+        thirdMatrix[2][0] = "isDefaultMethod()";
+        thirdMatrix[3][0] = "isDefaultValue()";
+        thirdMatrix[4][0] = "getDefaultValue()";
+        thirdMatrix[5][0] = "isInvokeBootstrap()";
+        thirdMatrix[6][0] = "isConstantBootstrap()";
+
+
+        for (int i = 0; i < length; i++) {
+            MethodDescription methodDesc = methodList.get(i);
+
+            int colIndex = i + 1;
+            thirdMatrix[0][colIndex] = methodDesc.getInternalName();
+            thirdMatrix[1][colIndex] = String.valueOf(methodDesc.isVirtual());
+            thirdMatrix[2][colIndex] = String.valueOf(methodDesc.isDefaultMethod());
+            thirdMatrix[3][colIndex] = String.valueOf(methodDesc.isDefaultValue());
+            thirdMatrix[4][colIndex] = String.valueOf(methodDesc.getDefaultValue());
+            thirdMatrix[5][colIndex] = String.valueOf(methodDesc.isInvokeBootstrap());
+            thirdMatrix[6][colIndex] = String.valueOf(methodDesc.isConstantBootstrap());
+        }
+
+        TableUtils.printTable(thirdMatrix);
+    }
+
+    private static String format(List<? extends NamedElement> nameList) {
+        int size = nameList.size();
+        String[] array = new String[size];
+        for (int i = 0; i < size; i++) {
+            NamedElement type = nameList.get(i);
+            String actualName = type.getActualName();
+            int index = actualName.lastIndexOf(".");
+            if (index >= 0) {
+                array[i] = actualName.substring(index + 1);
+            }
+            else {
+                array[i] = actualName;
+            }
+        }
+        return Arrays.toString(array);
+    }
+
+    private static String formatParamList(ParameterList<?> parameterList) {
+        List<TypeDescription.Generic> list = parameterList.stream().map(ParameterDescription::getType).toList();
+        return format(list);
     }
 }

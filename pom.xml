@@ -9,10 +9,16 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <!-- Resource -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- JDK -->
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <!-- Lib -->
         <byte.buddy.version>1.14.18</byte.buddy.version>
     </properties>
 
@@ -21,12 +27,6 @@
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy-dep</artifactId>
             <version>${byte.buddy.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>lsieun</groupId>
-            <artifactId>box-drawing-utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
