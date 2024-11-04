@@ -2,7 +2,7 @@ package lsieun.buddy.description;
 
 import lsieun.annotation.ToDo;
 import lsieun.cst.FormatConst;
-import lsieun.utils.TableUtils;
+import lsieun.box.BoxUtils;
 import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.TypeVariableSource;
 import net.bytebuddy.description.annotation.AnnotationValue;
@@ -314,7 +314,7 @@ public class DescriptionForMethod {
             firstMatrix[12][colIndex] =String.valueOf(methodDesc.getStackSize());
         }
 
-        TableUtils.printTable(firstMatrix);
+        BoxUtils.print(firstMatrix);
 
         String[][] secondMatrix = new String[4][length + 1];
         secondMatrix[0][0] = "Method Invoke";
@@ -332,7 +332,7 @@ public class DescriptionForMethod {
             secondMatrix[3][colIndex] = String.valueOf(methodDesc.isSpecializableFor(methodDesc.getDeclaringType().asErasure()));
         }
 
-        TableUtils.printTable(secondMatrix);
+        BoxUtils.print(secondMatrix);
 
         String[][] thirdMatrix = new String[7][length + 1];
         thirdMatrix[0][0] = "";
@@ -357,7 +357,7 @@ public class DescriptionForMethod {
             thirdMatrix[6][colIndex] = String.valueOf(methodDesc.isConstantBootstrap());
         }
 
-        TableUtils.printTable(thirdMatrix);
+        BoxUtils.print(thirdMatrix);
     }
 
     private static String format(List<? extends NamedElement> nameList) {

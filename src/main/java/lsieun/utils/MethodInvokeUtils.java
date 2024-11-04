@@ -1,6 +1,7 @@
 package lsieun.utils;
 
 import lsieun.cst.MyConst;
+import lsieun.box.BoxUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -71,7 +72,7 @@ public class MethodInvokeUtils {
                 matrix[i + 1][1] = text;
             }
 
-            TableUtils.printTable(matrix);
+            BoxUtils.print(matrix);
         }
     }
 

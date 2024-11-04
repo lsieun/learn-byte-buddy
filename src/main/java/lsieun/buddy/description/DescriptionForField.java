@@ -1,6 +1,7 @@
 package lsieun.buddy.description;
 
-import lsieun.utils.TableUtils;
+import lsieun.box.BoxUtils;
+
 import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.type.TypeDefinition;
 import net.bytebuddy.description.type.TypeDescription;
@@ -25,6 +26,6 @@ public class DescriptionForField {
                 {"getDescriptor()", descriptor},
         };
 
-        TableUtils.printTable(matrix);
+        BoxUtils.print(matrix);
     }
 }
