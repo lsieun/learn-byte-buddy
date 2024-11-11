@@ -1,7 +1,8 @@
-package run.buddy.common;
+package run.buddy.weaver;
 
 import lsieun.buddy.delegation.HardWorker;
 import lsieun.utils.OutputUtils;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;

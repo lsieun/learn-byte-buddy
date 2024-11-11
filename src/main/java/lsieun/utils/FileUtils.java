@@ -1,7 +1,11 @@
 package lsieun.utils;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileUtils {
     public static final Path OUTPUT_DIR = getOutputDirectory();
@@ -22,8 +26,13 @@ public class FileUtils {
     }
 
     private static Path getBaseDirectory() {
-        Path dirPath = Path.of(".", "target", "classes");
-        return dirPath.toAbsolutePath().normalize();
+        try {
+            URL url = FileUtils.class.getProtectionDomain().getCodeSource().getLocation();
+            URI uri = url.toURI();
+            return Paths.get(uri);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static byte[] readClassBytes(String className) {
@@ -37,18 +46,16 @@ public class FileUtils {
         }
 
         try (in) {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ByteArrayOutputStream bao = new ByteArrayOutputStream();
             byte[] buf = new byte[BUFFER_SIZE];
             int len;
             while ((len = in.read(buf)) != -1) {
-                out.write(buf, 0, len);
+                bao.write(buf, 0, len);
             }
-            return out.toByteArray();
+            return bao.toByteArray();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
-        //
-        return null;
     }
 
     public static InputStream getInputStream(String className) {
