@@ -26,6 +26,6 @@ public class DescriptionForField {
                 {"getDescriptor()", descriptor},
         };
 
-        BoxUtils.print(matrix);
+        BoxUtils.printMatrix(matrix);
     }
 }

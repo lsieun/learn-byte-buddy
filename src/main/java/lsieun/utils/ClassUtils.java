@@ -3,6 +3,14 @@ package lsieun.utils;
 import java.lang.reflect.Constructor;
 
 public class ClassUtils {
+    public static Class<?> loadClass(final String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Object createInstance(String className, Object... args) throws Exception {
         Class<?> clazz = Class.forName(className);
         return createInstance(clazz);

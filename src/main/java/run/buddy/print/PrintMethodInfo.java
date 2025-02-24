@@ -10,6 +10,7 @@ import java.lang.invoke.StringConcatFactory;
 import java.lang.runtime.ObjectMethods;
 import java.util.List;
 
+// TODO: remove
 public class PrintMethodInfo {
     public static void main(String[] args) {
         // 第 1 步，准备参数

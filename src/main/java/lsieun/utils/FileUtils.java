@@ -8,24 +8,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileUtils {
-    public static final Path OUTPUT_DIR = getOutputDirectory();
+    public static final Path OUTPUT_DIR = getCodeLocation();
     public static final int BUFFER_SIZE = 16 * 1024;
 
-    public static Path getTempDirectory() {
-        String tmpDir = System.getProperty("java.io.tmpdir");
-        return Path.of(tmpDir);
-    }
-
-    public static Path getOutputDirectory() {
-        return getBaseDirectory();
-    }
-
     public static Path getFilePath(String relativePath) {
-        Path dir = getBaseDirectory();
+        Path dir = getCodeLocation();
         return Path.of(dir.toString(), relativePath);
     }
 
-    private static Path getBaseDirectory() {
+    private static Path getCodeLocation() {
         try {
             URL url = FileUtils.class.getProtectionDomain().getCodeSource().getLocation();
             URI uri = url.toURI();

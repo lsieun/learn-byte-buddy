@@ -72,7 +72,7 @@ public class MethodInvokeUtils {
                 matrix[i + 1][1] = text;
             }
 
-            BoxUtils.print(matrix);
+            BoxUtils.printMatrix(matrix);
         }
     }
 

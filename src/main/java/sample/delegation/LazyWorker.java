@@ -1,4 +1,4 @@
-package lsieun.buddy.delegation;
+package sample.delegation;
 
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 

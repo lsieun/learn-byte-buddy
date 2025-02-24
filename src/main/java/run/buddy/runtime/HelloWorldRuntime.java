@@ -2,19 +2,21 @@ package run.buddy.runtime;
 
 import lsieun.utils.MethodInvokeUtils;
 import lsieun.utils.OutputUtils;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
 
+// TODO: remove
 public class HelloWorldRuntime {
     public static void main(String[] args) throws Exception {
-        // 第一步，准备参数
+        // 1. prepare
         String className = "sample.HelloWorld";
 
 
-        // 第二步，生成类
+        // 2. weave
         ByteBuddy byteBuddy = new ByteBuddy();
         DynamicType.Builder<?> builder = byteBuddy.subclass(Object.class)
                 .name(className);
@@ -23,7 +25,7 @@ public class HelloWorldRuntime {
                 .intercept(FixedValue.nullValue());
 
 
-        // 第三步，输出结果
+        // 3. output
         DynamicType.Unloaded<?> unloadedType = builder.make();
         OutputUtils.save(unloadedType);
 

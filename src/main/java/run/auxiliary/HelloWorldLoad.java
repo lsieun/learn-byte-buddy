@@ -1,4 +1,4 @@
-package run.test;
+package run.auxiliary;
 
 public class HelloWorldLoad {
     public static void main(String[] args) throws ClassNotFoundException {

@@ -10,7 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 public class HelloWorldGenerate {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String className = "sample.HelloWorld";
 
         ByteBuddy byteBuddy = new ByteBuddy();

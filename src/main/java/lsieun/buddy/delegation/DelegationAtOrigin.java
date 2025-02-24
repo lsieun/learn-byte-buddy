@@ -8,6 +8,7 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Executable;
 import java.util.Formatter;
 
+// TODO: remove
 public class DelegationAtOrigin {
 
     @RuntimeType

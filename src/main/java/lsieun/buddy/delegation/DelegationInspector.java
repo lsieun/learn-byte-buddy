@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.Formatter;
 import java.util.concurrent.Callable;
 
+// TODO: remove
 public class DelegationInspector {
     @RuntimeType
     public static Object inspect(

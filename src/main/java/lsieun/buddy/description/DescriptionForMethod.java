@@ -314,7 +314,7 @@ public class DescriptionForMethod {
             firstMatrix[12][colIndex] =String.valueOf(methodDesc.getStackSize());
         }
 
-        BoxUtils.print(firstMatrix);
+        BoxUtils.printMatrix(firstMatrix);
 
         String[][] secondMatrix = new String[4][length + 1];
         secondMatrix[0][0] = "Method Invoke";
@@ -332,7 +332,7 @@ public class DescriptionForMethod {
             secondMatrix[3][colIndex] = String.valueOf(methodDesc.isSpecializableFor(methodDesc.getDeclaringType().asErasure()));
         }
 
-        BoxUtils.print(secondMatrix);
+        BoxUtils.printMatrix(secondMatrix);
 
         String[][] thirdMatrix = new String[7][length + 1];
         thirdMatrix[0][0] = "";
@@ -357,7 +357,7 @@ public class DescriptionForMethod {
             thirdMatrix[6][colIndex] = String.valueOf(methodDesc.isConstantBootstrap());
         }
 
-        BoxUtils.print(thirdMatrix);
+        BoxUtils.printMatrix(thirdMatrix);
     }
 
     private static String format(List<? extends NamedElement> nameList) {
